@@ -3,7 +3,6 @@
 // линия работает. Импелентировать стоп на черном квадрате.
 // Line sensors
 #define NUM_SENSORS 8
-int _sensorPins[NUM_SENSORS] = { A0, A1, A2, A3, A4, A5, A6, A7 };
 
 // Motor pins
 #define MA1 11  //RF
@@ -21,6 +20,7 @@ int _sensorPins[NUM_SENSORS] = { A0, A1, A2, A3, A4, A5, A6, A7 };
 #define SERVO_UPDATE_INTERVAL 20  // Servo update interval (ms)
 
 // variables
+int _sensorPins[NUM_SENSORS] = { A0, A1, A2, A3, A4, A5, A6, A7 };
 const int _sensorDataInterval = 500;
 int _timerColor = 0;
 const float WHEEL_DIAMETER = 6.5;
@@ -32,7 +32,7 @@ static unsigned long lastUpdate = 0;
 unsigned long startCheckTime = 0;  // Время начала проверки черного квадрата
 bool isOnBlackSquare = false;
 
-int front = -100;
+// int front = -100;
 
 
 // Motor control functions
@@ -194,30 +194,31 @@ void followLine()
   read_bool_color();
 
   // Если это первый запуск, запоминаем момент старта
-  // if (startCheckTime == 0)
-  // {
-  //   startCheckTime = millis();
-  // }
+  if (startCheckTime == 0)
+  {
+    startCheckTime = millis();
+  }
 
-  // if (millis() - startCheckTime > 5000)
-  // {
-  //   if (detectBlackSquare())
-  //   {
-  //     setMotors(255, 255);  // Робот двигается немного вперед
-  //     delay(500);  // Ждем немного, чтобы проехать
+  if (millis() - startCheckTime > 2000)
+  {
+    if (detectBlackSquare())
+    {
+      setMotors(255, 255);  // Робот двигается немного вперед
+      delay(200);  // Ждем немного, чтобы проехать
 
-  //     read_bool_color();  // Считываем значения с датчиков
+      read_bool_color();  // Считываем значения с датчиков
 
-  //     if (detectBlackSquare()) 
-  //     {
-  //       allStop();  // Останавливаем робота
-  //       while(true)
-  //       {
-  //         delay(500);  // Бесконечный цикл, робот не двигается
-  //       }
-  //     }
-  //   }
-  // }
+      if (detectBlackSquare()) 
+      {
+        allStop();  // Останавливаем робота
+        while(true)
+        {
+          delay(500);  // Бесконечный цикл, робот не двигается
+        }
+      }
+    }
+  }
+
   if (getDistance() < 15)
   {
     avoidObject();
