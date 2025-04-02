@@ -194,30 +194,7 @@ void followLine()
   read_bool_color();
 
   // Если это первый запуск, запоминаем момент старта
-  if (startCheckTime == 0)
-  {
-    startCheckTime = millis();
-  }
-
-  if (millis() - startCheckTime > 2000)
-  {
-    if (detectBlackSquare())
-    {
-      setMotors(255, 255);  // Робот двигается немного вперед
-      delay(200);  // Ждем немного, чтобы проехать
-
-      read_bool_color();  // Считываем значения с датчиков
-
-      if (detectBlackSquare()) 
-      {
-        allStop();  // Останавливаем робота
-        while(true)
-        {
-          delay(500);  // Бесконечный цикл, робот не двигается
-        }
-      }
-    }
-  }
+  stop();
 
   if (getDistance() < 15)
   {
@@ -298,7 +275,36 @@ void start()
 
 void stop()
 {
-  gripper(GRIPPER_OPEN, 3);
+  if (startCheckTime == 0)
+  {
+    startCheckTime = millis();
+  }
+
+  if (millis() - startCheckTime > 5000)
+  {
+    if (detectBlackSquare())
+    {
+      setMotors(255, 255); 
+      delay(200); 
+
+      read_bool_color(); 
+
+      if (detectBlackSquare()) 
+      {
+        setMotors(-255, -255);
+        delay(300);
+        gripper(GRIPPER_OPEN, 3);
+        setMotors(-255, -255);
+        delay(3000);
+        allStop(); 
+        while (true)
+        {
+          delay(500);  
+        }
+      }
+    }
+  }
+  
 }
 
 void setup() {
