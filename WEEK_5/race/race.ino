@@ -248,12 +248,6 @@ void gripper(int pulse, int count)
 
 void start()
 {
-  while (getDistance() > 15)
-  {
-    allStop();
-    delay(50);
-  }
-
   while (getDistance() < 15)
   {
     allStop();
