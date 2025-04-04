@@ -226,7 +226,7 @@ bool detectBlackSquare()
 {
   read_bool_color(); 
 
-  for (int i = 0; i < NUM_SENSORS; i++)
+  for (int i = 0; i < NUM_SENSORS - 2; i++)
   {
     if (!_whereIsLine[i])
     { 
